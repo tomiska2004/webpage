@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin – Vezérlőpult</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <h1>Admin vezérlőpult</h1>
+    <nav>
+      <a href="/add">➕ Új termék</a>
+      <a href="/logout">Kijelentkezés</a>
+    </nav>
+  </header>
+
+  <main>
+    <table>
+      <thead>
+        <tr>
+          <th>Kép</th>
+          <th>Név</th>
+          <th>Leírás</th>
+          <th>Ár (Ft)</th>
+          <th>Művelet</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in products %}
+          <tr>
+            <td><img src="{{ url_for('static', filename='uploads/' ~ product[4]) }}" alt="{{ product[1] }}" width="80"></td>
+            <td>{{ product[1] }}</td>
+            <td>{{ product[2] }}</td>
+            <td>{{ product[3] }}</td>
+            <td>
+              <a href="/edit/{{ product[0] }}">Szerkesztés</a> |
+              <a href="/delete/{{ product[0] }}" onclick="return confirm('Biztosan törölni szeretnéd?')">Törlés</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>

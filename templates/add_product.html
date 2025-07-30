@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <title>Új termék hozzáadása</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main class="form-container">
+    <h1>Új termék hozzáadása</h1>
+    <form method="POST" enctype="multipart/form-data">
+      <label>Név:</label>
+      <input type="text" name="title" required>
+      <label>Leírás:</label>
+      <textarea name="description" required></textarea>
+      <label>Ár (Ft):</label>
+      <input type="number" step="0.01" name="price" required>
+      <label>Kép feltöltése:</label>
+      <input type="file" name="image" accept="image/*" required>
+      <button type="submit">Mentés</button>
+    </form>
+    <a href="/dashboard">⬅ Vissza</a>
+  </main>
+</body>
+</html>
