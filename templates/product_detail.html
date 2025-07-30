@@ -3,15 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <title>{{ product[1] }} – Részletek</title>
-  <link rel="stylesheet" href="/static/uploads/style2.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    body,h1,h2,h3,h4,h5,h6 {font-family:"Raleway", sans-serif}
+    .product-image {
+      width: 100%;
+      max-height: 500px;
+      object-fit: cover;
+    }
+  </style>
 </head>
-<body>
-  <main class="form-container">
-    <h1>{{ product[1] }}</h1>
-    <img src="{{ url_for('static', filename='uploads/' ~ product[4]) }}" style="width:100%; max-height:400px; object-fit:cover;"><br><br>
+<body class="w3-light-grey w3-content" style="max-width:1600px">
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
+  <div class="w3-container">
+    <h4><b>Üzlet</b></h4>
+  </div>
+  <div class="w3-bar-block">
+    <a href="/" class="w3-bar-item w3-button">Főoldal</a>
+    <a href="/login" class="w3-bar-item w3-button">Admin belépés</a>
+  </div>
+</nav>
+
+<!-- Overlay on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
+
+<!-- Page content -->
+<div class="w3-main" style="margin-left:300px">
+
+  <div class="w3-container w3-padding-32">
+    <h1 class="w3-xxlarge">{{ product[1] }}</h1>
+
+    <img src="{{ url_for('static', filename='uploads/' ~ product[4]) }}" alt="{{ product[1] }}" class="product-image w3-card-4 w3-margin-bottom">
+
     <p><strong>Ár:</strong> {{ product[3] }} Ft</p>
     <p>{{ product[2] }}</p>
-    <a href="/">⬅ Vissza</a>
-  </main>
+
+    <a href="/" class="w3-button w3-light-grey w3-margin-top"><i class="fa fa-arrow-left"></i> Vissza</a>
+  </div>
+
+  <footer class="w3-container w3-dark-grey w3-padding-32 w3-margin-top">
+    <h4>Kisbolt</h4>
+    <p>© 2025</p>
+  </footer>
+
+</div>
+
+<script>
+function w3_open() {
+  document.getElementById("mySidebar").style.display = "block";
+  document.getElementById("myOverlay").style.display = "block";
+}
+function w3_close() {
+  document.getElementById("mySidebar").style.display = "none";
+  document.getElementById("myOverlay").style.display = "none";
+}
+</script>
+
 </body>
 </html>

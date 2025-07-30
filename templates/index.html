@@ -1,28 +1,76 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-  <meta charset="UTF-8" />
-  <title>Termékek</title>
-  <link rel="stylesheet" href="/static/uploads/style.css" />
+  <meta charset="UTF-8">
+  <title>Bolt</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    body,h1,h2,h3,h4,h5,h6 {font-family:"Raleway", sans-serif}
+    a {text-decoration:none; color:inherit;}
+    .product-card img {width:100%; height:200px; object-fit:cover;}
+  </style>
 </head>
-<body>
-  <header>
-    <h1>Üdvözlünk a boltban</h1>
-   
+<body class="w3-light-grey w3-content" style="max-width:1600px">
+
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
+  <div class="w3-container">
+    <h4><b>Üzlet</b></h4>
+  </div>
+  <div class="w3-bar-block">
+    <a href="/" class="w3-bar-item w3-button">Főoldal</a>
+    <a href="/login" class="w3-bar-item w3-button">Admin belépés</a>
+  </div>
+</nav>
+
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
+
+<div class="w3-main" style="margin-left:300px">
+
+  <header class="w3-container w3-padding-32 w3-center">
+    <h1 class="w3-xxxlarge">Üdvözlünk a boltban</h1>
   </header>
-  <main>
-    <div class="product-list">
-      {% for product in products %}
-        <a href="{{ url_for('product_detail', product_id=product[0]) }}" class="product-card">
-          <img src="{{ url_for('static', filename='uploads/' ~ product[4]) }}" alt="{{ product[1] }}" />
-          <h2>{{ product[1] }}</h2>
-          <p>{{ product[3] }} Ft</p>
-        </a>
-      {% endfor %}
-    </div>
-  </main>
+
+  <div class="w3-content" style="max-width:1200px">
+    {% for row in products|batch(3, '') %}
+      <div class="w3-row-padding w3-margin-top">
+        {% for product in row %}
+          {% if product %}
+            <div class="w3-third w3-container w3-margin-bottom">
+              <a href="{{ url_for('product_detail', product_id=product[0]) }}" class="product-card">
+                <img src="{{ url_for('static', filename='uploads/' ~ product[4]) }}" alt="{{ product[1] }}" class="w3-hover-opacity">
+                <div class="w3-container w3-white">
+                  <p><b>{{ product[1] }}</b></p>
+                  <p>{{ product[2][:80] }}{% if product[2]|length > 80 %}...{% endif %}</p>
+                  <p><strong>{{ product[3] }} Ft</strong></p>
+                </div>
+              </a>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <footer class="w3-container w3-dark-grey w3-padding-32">
+    <h4>Kisbolt</h4>
+    <p>© 2025</p>
+  </footer>
+
+</div>
+
+<script>
+function w3_open() {
+  document.getElementById("mySidebar").style.display = "block";
+  document.getElementById("myOverlay").style.display = "block";
+}
+function w3_close() {
+  document.getElementById("mySidebar").style.display = "none";
+  document.getElementById("myOverlay").style.display = "none";
+}
+</script>
+
 </body>
 </html>
