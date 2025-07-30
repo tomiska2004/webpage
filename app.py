@@ -123,5 +123,9 @@ def product_detail(product_id):
     return render_template('product_detail.html', product=product)
 
 
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))  # Render PORT env variable
+    app.run(host='0.0.0.0', port=port)
+
