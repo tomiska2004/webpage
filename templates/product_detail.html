@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ product[1] }} – Részletek</title>
+  <link rel="stylesheet" href="/static/uploads/style.css">
+</head>
+<body>
+  <main class="form-container">
+    <h1>{{ product[1] }}</h1>
+    <img src="{{ url_for('static', filename='uploads/' ~ product[4]) }}" style="width:100%; max-height:400px; object-fit:cover;"><br><br>
+    <p><strong>Ár:</strong> {{ product[3] }} Ft</p>
+    <p>{{ product[2] }}</p>
+    <a href="/">⬅ Vissza</a>
+  </main>
+</body>
+</html>

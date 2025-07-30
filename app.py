@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, request, redirect, url_for, session
 import os
 import sqlite3
@@ -25,11 +26,9 @@ def init_db():
 
 init_db()
 
-# Admin credentials
 ADMIN_USER = "admin"
 ADMIN_PASS = "password"
 
-# Routes
 @app.route('/')
 def index():
     conn = sqlite3.connect('products.db')
@@ -84,20 +83,17 @@ def add_product():
 def edit_product(product_id):
     if not session.get('admin'):
         return redirect(url_for('login'))
-
     conn = sqlite3.connect('products.db')
     if request.method == 'POST':
         title = request.form['title']
         desc = request.form['description']
         price = request.form['price']
         image = conn.execute('SELECT image FROM products WHERE id=?', (product_id,)).fetchone()[0]
-
         file = request.files['image']
         if file.filename:
             image = file.filename
             path = os.path.join(app.config['UPLOAD_FOLDER'], image)
             file.save(path)
-
         conn.execute('UPDATE products SET title=?, description=?, price=?, image=? WHERE id=?',
                      (title, desc, price, image, product_id))
         conn.commit()
@@ -116,6 +112,16 @@ def delete_product(product_id):
     conn.commit()
     conn.close()
     return redirect(url_for('dashboard'))
+
+@app.route('/product/<int:product_id>')
+def product_detail(product_id):
+    conn = sqlite3.connect('products.db')
+    product = conn.execute('SELECT * FROM products WHERE id=?', (product_id,)).fetchone()
+    conn.close()
+    if not product:
+        return "A termék nem található", 404
+    return render_template('product_detail.html', product=product)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

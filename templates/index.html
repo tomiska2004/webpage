@@ -1,27 +1,23 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Termékek</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="/static/uploads/style.css" />
 </head>
 <body>
   <header>
     <h1>Üdvözlünk a boltban</h1>
-    <nav>
-      <a href="/login">Admin bejelentkezés</a>
-    </nav>
+    <nav><a href="/login">Admin bejelentkezés</a></nav>
   </header>
-
   <main>
-    <div class="product-grid">
+    <div class="product-list">
       {% for product in products %}
-        <div class="product-card">
-          <img src="{{ url_for('static', filename='uploads/' ~ product[4]) }}" alt="{{ product[1] }}">
+        <a href="{{ url_for('product_detail', product_id=product[0]) }}" class="product-card">
+          <img src="{{ url_for('static', filename='uploads/' ~ product[4]) }}" alt="{{ product[1] }}" />
           <h2>{{ product[1] }}</h2>
-          <p>{{ product[2] }}</p>
-          <p><strong>{{ product[3] }} Ft</strong></p>
-        </div>
+          <p>{{ product[3] }} Ft</p>
+        </a>
       {% endfor %}
     </div>
   </main>
