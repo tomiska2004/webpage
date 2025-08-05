@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 # Babel config
-app.config['BABEL_DEFAULT_LOCALE'] = 'hu'
+app.config['BABEL_DEFAULT_LOCALE'] = 'ro'
 app.config['BABEL_SUPPORTED_LOCALES'] = ['en', 'hu', 'ro']
 app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'translations'
 
