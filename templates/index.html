@@ -2,7 +2,7 @@
 <html lang="hu">
 <head>
   <meta charset="UTF-8">
-  <title>Bolt</title>
+  <title>Transylvanicum</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
@@ -39,6 +39,12 @@
     <a href="https://facebook.com" target="_blank"><i class="fa fa-facebook-official"></i></a>
     <a href="https://instagram.com" target="_blank"><i class="fa fa-instagram"></i></a>
   </div>
+  <div class="lang-switcher">
+  <a href="?lang=hu">🇭🇺 Magyar</a> |
+  <a href="?lang=ro">🇷🇴 Română</a> |
+  <a href="?lang=en">🇬🇧 English</a>
+</div>
+
 </nav>
 
 <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
@@ -55,7 +61,7 @@
     <form method="get" class="w3-container w3-card-4 w3-white filter-form">
       <div class="w3-row-padding">
         <div class="w3-third">
-          <label>Material</label>
+          <label>_('Material')</label>
           <select name="material" class="w3-select">
             <option value="">All</option>
             {% for mat in materials %}
@@ -93,7 +99,7 @@
         {% for product in row %}
           {% if product %}
             <div class="w3-third w3-container w3-margin-bottom">
-              <a href="{{ url_for('product_detail', product_id=product[0]) }}" class="product-card">
+              <a href="{{ url_for('product_detail', id=product[0]) }}" class="product-card">
                 <img src="{{ url_for('static', filename='uploads/' ~ product[4]) }}" alt="{{ product[1] }}" class="w3-hover-opacity">
                 <div class="w3-container w3-white">
                   <p><b>{{ product[1] }}</b></p>

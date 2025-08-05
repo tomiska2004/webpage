@@ -13,34 +13,47 @@
 
 <div class="w3-container w3-card-4 w3-white w3-margin">
   <form method="post" enctype="multipart/form-data" class="w3-container">
+    
     <p>
       <label>Cím</label>
       <input class="w3-input" type="text" name="title" required>
     </p>
+    
     <p>
       <label>Leírás</label>
       <textarea class="w3-input" name="description" required></textarea>
     </p>
+    
     <p>
       <label>Ár (Ft)</label>
       <input class="w3-input" type="number" name="price" step="0.01" required>
     </p>
+    
     <p>
-      <label>Kép</label>
-      <input class="w3-input" type="file" name="image" required>
+      <label>Fő kép (megjelenik a listában)</label>
+      <input class="w3-input" type="file" name="image" accept="image/*" required>
     </p>
+    
+    <p>
+      <label>További képek (opcionális)</label>
+      <input class="w3-input" type="file" name="extra_images" accept="image/*" multiple>
+    </p>
+    
     <p>
       <label>Anyag</label>
       <input class="w3-input" type="text" name="material" placeholder="Pl. ametiszt, citrin" required>
     </p>
+    
     <p>
       <label>Típus</label>
       <input class="w3-input" type="text" name="product_type" placeholder="Pl. nyaklánc, gyűrű, fülbevaló" required>
     </p>
+    
     <p>
       <button class="w3-button w3-teal" type="submit">Mentés</button>
       <a href="{{ url_for('dashboard') }}" class="w3-button w3-grey">Mégse</a>
     </p>
+  
   </form>
 </div>
 

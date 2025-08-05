@@ -2,18 +2,41 @@
 <html lang="hu">
 <head>
   <meta charset="UTF-8">
-  <title>{{ product[1] }} – Details</title>
+  <title>{{ product[1] }} – Részletek</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
     body,h1,h2,h3,h4,h5,h6 {font-family:"Raleway", sans-serif}
-    .product-image {
-      width: 50%;
-      max-height: 50%;
-      object-fit: cover;
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      margin: auto;
     }
+    .carousel-image {
+      width: 100%;
+      max-height: 500px;
+      object-fit: contain;
+      display: none;
+    }
+    .carousel-image.active {
+      display: block;
+    }
+    .carousel-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0,0,0,0.5);
+      color: white;
+      border: none;
+      font-size: 24px;
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+    .carousel-button.left { left: 0; }
+    .carousel-button.right { right: 0; }
   </style>
 </head>
 <body class="w3-light-grey w3-content" style="max-width:1600px">
@@ -21,10 +44,10 @@
 <!-- Sidebar -->
 <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
   <div class="w3-container">
-    <h4><b>Showroom</b></h4>
+    <h4><b>Transylvanicum Gem</b></h4>
   </div>
   <div class="w3-bar-block">
-    <a href="/" class="w3-bar-item w3-button">Home Page</a>
+    <a href="/" class="w3-bar-item w3-button">Főoldal</a>
   </div>
 </nav>
 
@@ -39,29 +62,36 @@
 
     <div class="w3-row-padding">
       <div class="w3-half">
-        <img src="{{ url_for('static', filename='uploads/' ~ product[4]) }}" alt="{{ product[1] }}"
-             class="w3-image w3-card-4" style="max-height:500px; object-fit:contain;">
+        <!-- Carousel -->
+        <div class="carousel-container">
+          {% for image in images %}
+            <img src="{{ url_for('static', filename='uploads/' ~ image) }}" alt="Image {{ loop.index }}" class="carousel-image {% if loop.first %}active{% endif %}">
+          {% endfor %}
+          {% if images|length > 1 %}
+            <button class="carousel-button left" onclick="prevImage()">&#10094;</button>
+            <button class="carousel-button right" onclick="nextImage()">&#10095;</button>
+          {% endif %}
+        </div>
       </div>
 
       <div class="w3-half">
         <p class="w3-large">{{ product[2] }}</p>
-        <p class="w3-xlarge"><strong>Price:</strong> {{ product[3] }} RON</p>
-
-        
+        <p class="w3-xlarge"><strong>Ár:</strong> {{ product[3] }} Ft</p>
       </div>
     </div>
 
   </div>
- <a href="/" class="w3-button w3-light-grey w3-margin-top">
-          <i class="fa fa-arrow-left"></i> Back
-        </a>
+
+  <a href="/" class="w3-button w3-light-grey w3-margin-top">
+    <i class="fa fa-arrow-left"></i> Vissza
+  </a>
+
   <footer class="w3-container w3-dark-grey w3-padding-32 w3-margin-top">
     <h4>Transylvanicum Gem</h4>
     <p>© 2025 Transylvanicum &nbsp;&nbsp; transylvanicumgem@gmail.com</p>
   </footer>
 
 </div>
-
 
 <script>
 function w3_open() {
@@ -71,6 +101,27 @@ function w3_open() {
 function w3_close() {
   document.getElementById("mySidebar").style.display = "none";
   document.getElementById("myOverlay").style.display = "none";
+}
+
+// Image Carousel Logic
+let current = 0;
+const images = document.querySelectorAll(".carousel-image");
+
+function showImage(index) {
+  images.forEach((img, i) => {
+    img.classList.remove("active");
+    if (i === index) img.classList.add("active");
+  });
+}
+
+function prevImage() {
+  current = (current - 1 + images.length) % images.length;
+  showImage(current);
+}
+
+function nextImage() {
+  current = (current + 1) % images.length;
+  showImage(current);
 }
 </script>
 
