@@ -33,28 +33,39 @@
 <body class="w3-light-grey w3-content" style="max-width:1600px">
 
 <!-- Sidebar -->
-<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
+ <!-- Top bar with toggle button for small screens -->
+<div class="w3-bar w3-top w3-hide-large w3-black w3-xlarge">
+  <button class="w3-bar-item w3-button w3-padding-16" onclick="w3_open()">☰</button>
+  <span class="w3-bar-item">SHOWROOM</span>
+</div>
+
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar">
+  <!-- Close button on mobile -->
+  <div class="w3-container w3-hide-large w3-black">
+    <button onclick="w3_close()" class="w3-button w3-black w3-xlarge">✕</button>
+  </div>
+
   <div class="w3-container">
     <h4><b>SHOWROOM</b></h4>
   </div>
+
   <div class="w3-bar-block">
-    <a href="/" class="w3-bar-item w3-button">Home Page</a>
+    <a href="/" class="w3-bar-item w3-button" onclick="w3_close()">Home Page</a>
     <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button">
       <i class="fa fa-envelope w3-margin-right"></i>Contact
     </a>
   </div>
+
   <div class="social-icons" style="position:absolute; bottom:20px; left:20px;">
     <a href="https://www.tiktok.com/@transylvanicum.ge?_t=ZN-8ydBcKtIOQA&_r=1" target="_blank">
-  <i class="fa-brands fa-tiktok"></i>
-</a>
-
+      <i class="fa-brands fa-tiktok"></i>
+    </a>
     <a href="https://www.instagram.com/transylvanicumgem?igsh=MXhieHBpNXhoNXVldg%3D%3D&utm_source=qr" target="_blank">
-    <i class="fa-brands fa-instagram"></i>
-  </a>
-</div>
-  
-
+      <i class="fa-brands fa-instagram"></i>
+    </a>
+  </div>
 </nav>
+
 
 <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
 
@@ -162,11 +173,10 @@
 <script>
 function w3_open() {
   document.getElementById("mySidebar").style.display = "block";
-  document.getElementById("myOverlay").style.display = "block";
 }
+
 function w3_close() {
   document.getElementById("mySidebar").style.display = "none";
-  document.getElementById("myOverlay").style.display = "none";
 }
 </script>
 
