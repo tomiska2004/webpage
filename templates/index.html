@@ -11,22 +11,14 @@
     body,h1,h2,h3,h4,h5,h6 {font-family:"Raleway", sans-serif}
     a {text-decoration:none; color:inherit;}
     .product-card img {
-  width: 100%;
-  height: auto;
-  max-height: 250px;
-  object-fit: contain;
-  background-color: #f5f5f5; /* háttér, ha nem tölti ki teljesen */
-}
-
-    .w3-sidebar .social-icons {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
+      width: 100%;
+      height: auto;
+      max-height: 250px;
+      object-fit: contain;
+      background-color: #f5f5f5;
     }
-    .social-icons a {
-      margin-right: 10px;
-      font-size: 24px;
-      color: #333;
+    .filter-form {
+      margin: 20px 0;
     }
   </style>
 </head>
@@ -43,15 +35,12 @@
       <i class="fa fa-envelope w3-margin-right"></i>Kapcsolat
     </a>
   </div>
-
-  <!-- Social icons -->
-  <div class="social-icons">
+  <div class="social-icons" style="position:absolute; bottom:20px; left:20px;">
     <a href="https://facebook.com" target="_blank"><i class="fa fa-facebook-official"></i></a>
     <a href="https://instagram.com" target="_blank"><i class="fa fa-instagram"></i></a>
   </div>
 </nav>
 
-<!-- Overlay for mobile -->
 <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
 
 <!-- Page content -->
@@ -62,6 +51,43 @@
   </header>
 
   <div class="w3-content" style="max-width:1200px">
+    <!-- Filter Form -->
+    <form method="get" class="w3-container w3-card-4 w3-white filter-form">
+      <div class="w3-row-padding">
+        <div class="w3-third">
+          <label>Anyag</label>
+          <select name="material" class="w3-select">
+            <option value="">Mind</option>
+            {% for mat in materials %}
+              <option value="{{ mat }}" {% if request.args.get('material') == mat %}selected{% endif %}>{{ mat }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="w3-third">
+          <label>Típus</label>
+          <select name="product_type" class="w3-select">
+            <option value="">Mind</option>
+            {% for t in product_types %}
+              <option value="{{ t }}" {% if request.args.get('product_type') == t %}selected{% endif %}>{{ t }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="w3-third">
+          <label>Ár szerint</label>
+          <select name="sort" class="w3-select">
+            <option value="">Nincs</option>
+            <option value="asc" {% if request.args.get('sort') == 'asc' %}selected{% endif %}>Növekvő</option>
+            <option value="desc" {% if request.args.get('sort') == 'desc' %}selected{% endif %}>Csökkenő</option>
+          </select>
+        </div>
+      </div>
+      <div class="w3-padding">
+        <button class="w3-button w3-teal w3-margin-top">Szűrés</button>
+        <a href="{{ url_for('index') }}" class="w3-button w3-grey w3-margin-top">Törlés</a>
+      </div>
+    </form>
+
+    <!-- Product Listing -->
     {% for row in products|batch(3, '') %}
       <div class="w3-row-padding w3-margin-top">
         {% for product in row %}
@@ -73,6 +99,7 @@
                   <p><b>{{ product[1] }}</b></p>
                   <p>{{ product[2][:80] }}{% if product[2]|length > 80 %}...{% endif %}</p>
                   <p><strong>{{ product[3] }} Ft</strong></p>
+                  <p><i>{{ product[5] }} | {{ product[6] }}</i></p>
                 </div>
               </a>
             </div>
@@ -85,7 +112,7 @@
   <!-- Contact Section -->
   <div class="w3-container w3-padding-large w3-grey" id="contact">
     <h4><b>Kapcsolat</b></h4>
-    <div class="w3-row-padding w3-center w3-padding-24" style="margin:0 -16px">
+    <div class="w3-row-padding w3-center w3-padding-24">
       <div class="w3-third w3-dark-grey">
         <p><i class="fa fa-envelope w3-xxlarge w3-text-light-grey"></i></p>
         <p>transylvanicumgem@gmail.com</p>
@@ -96,7 +123,6 @@
       </div>
     </div>
     <hr class="w3-opacity">
-    
   </div>
 
   <footer class="w3-container w3-dark-grey w3-padding-32">

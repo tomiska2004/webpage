@@ -1,4 +1,3 @@
-
 from flask import Flask, render_template, request, redirect, url_for, session
 import os
 import sqlite3
@@ -18,7 +17,9 @@ def init_db():
             title TEXT,
             description TEXT,
             price REAL,
-            image TEXT
+            image TEXT,
+            material TEXT,
+            product_type TEXT
         )
     ''')
     conn.commit()
@@ -31,10 +32,30 @@ ADMIN_PASS = "password"
 
 @app.route('/')
 def index():
+    material = request.args.get('material')
+    product_type = request.args.get('product_type')
+    sort = request.args.get('sort')
+
+    query = 'SELECT * FROM products WHERE 1=1'
+    params = []
+
+    if material:
+        query += ' AND material = ?'
+        params.append(material)
+    if product_type:
+        query += ' AND product_type = ?'
+        params.append(product_type)
+    if sort == 'asc':
+        query += ' ORDER BY price ASC'
+    elif sort == 'desc':
+        query += ' ORDER BY price DESC'
+
     conn = sqlite3.connect('products.db')
-    products = conn.execute('SELECT * FROM products').fetchall()
+    products = conn.execute(query, params).fetchall()
     conn.close()
-    return render_template('index.html', products=products)
+
+    return render_template('index.html', products=products, selected_material=material,
+                           selected_type=product_type, selected_sort=sort)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -66,14 +87,16 @@ def add_product():
         title = request.form['title']
         desc = request.form['description']
         price = request.form['price']
+        material = request.form['material']
+        product_type = request.form['product_type']
         file = request.files['image']
         filename = file.filename
         path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(path)
 
         conn = sqlite3.connect('products.db')
-        conn.execute('INSERT INTO products (title, description, price, image) VALUES (?, ?, ?, ?)',
-                     (title, desc, price, filename))
+        conn.execute('INSERT INTO products (title, description, price, image, material, product_type) VALUES (?, ?, ?, ?, ?, ?)',
+                     (title, desc, price, filename, material, product_type))
         conn.commit()
         conn.close()
         return redirect(url_for('dashboard'))
@@ -88,14 +111,16 @@ def edit_product(product_id):
         title = request.form['title']
         desc = request.form['description']
         price = request.form['price']
+        material = request.form['material']
+        product_type = request.form['product_type']
         image = conn.execute('SELECT image FROM products WHERE id=?', (product_id,)).fetchone()[0]
         file = request.files['image']
         if file.filename:
             image = file.filename
             path = os.path.join(app.config['UPLOAD_FOLDER'], image)
             file.save(path)
-        conn.execute('UPDATE products SET title=?, description=?, price=?, image=? WHERE id=?',
-                     (title, desc, price, image, product_id))
+        conn.execute('UPDATE products SET title=?, description=?, price=?, image=?, material=?, product_type=? WHERE id=?',
+                     (title, desc, price, image, material, product_type, product_id))
         conn.commit()
         conn.close()
         return redirect(url_for('dashboard'))
@@ -122,10 +147,6 @@ def product_detail(product_id):
         return "A termék nem található", 404
     return render_template('product_detail.html', product=product)
 
-
-
-
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))  # Render PORT env variable
+    port = int(os.environ.get('PORT', 5003))
     app.run(host='0.0.0.0', port=port)
-
