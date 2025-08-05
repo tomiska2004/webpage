@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-08-05 15:59+0300\n"
+"POT-Creation-Date: 2025-08-05 16:16+0300\n"
 "PO-Revision-Date: 2025-08-05 16:00+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -17,4 +17,40 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
+
+#: templates/index.html:64
+msgid "Material"
+msgstr ""
+
+#: templates/index.html:66 templates/index.html:75
+msgid "All"
+msgstr ""
+
+#: templates/index.html:73
+msgid "Type"
+msgstr ""
+
+#: templates/index.html:82
+msgid "Sort by price"
+msgstr ""
+
+#: templates/index.html:128
+msgid "Gheorgheni, RO"
+msgstr ""
+
+#: templates/product_detail.html:5
+msgid "Details"
+msgstr ""
+
+#: templates/product_detail.html:50
+msgid "Home Page"
+msgstr ""
+
+#: templates/product_detail.html:79
+msgid "Price"
+msgstr ""
+
+#: templates/product_detail.html:86
+msgid "Back"
+msgstr ""
 

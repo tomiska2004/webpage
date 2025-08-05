@@ -6,24 +6,24 @@ from werkzeug.utils import secure_filename
 from flask_babel import Babel, gettext as _
 from flask import request
 
-app = Flask(__name__) 
-# # Flask-Babel configuration
-# app.config['BABEL_DEFAULT_LOCALE'] = 'hu'
-# app.config['BABEL_SUPPORTED_LOCALES'] = ['hu', 'ro', 'en']
+app = Flask(__name__)
+app.secret_key = 'your_secret_key'
 
-# babel = Babel(app)
+# Babel config
+app.config['BABEL_DEFAULT_LOCALE'] = 'hu'
+app.config['BABEL_SUPPORTED_LOCALES'] = ['en', 'hu', 'ro']
+app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'translations'
 
-# @babel.localeselector
-# def get_locale():
-#     # Priority: URL param > session > browser setting
-#     lang = request.args.get('lang')
-#     if lang in app.config['BABEL_SUPPORTED_LOCALES']:
-#         session['lang'] = lang
-#         return lang
-#     return session.get('lang', request.accept_languages.best_match(app.config['BABEL_SUPPORTED_LOCALES']))
+# Define selector function
+def get_locale():
+    # Example: allow override via ?lang=en in URL
+    lang = request.args.get('lang')
+    if lang in app.config['BABEL_SUPPORTED_LOCALES']:
+        session['lang'] = lang
+    return session.get('lang', app.config['BABEL_DEFAULT_LOCALE'])
 
-
-app.secret_key = 'your-secret-key'
+# Pass selector to Babel
+babel = Babel(app, locale_selector=get_locale)
 UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
