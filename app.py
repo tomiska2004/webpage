@@ -32,30 +32,43 @@ ADMIN_PASS = "password"
 
 @app.route('/')
 def index():
-    material = request.args.get('material')
-    product_type = request.args.get('product_type')
-    sort = request.args.get('sort')
+    conn = sqlite3.connect('products.db')
+    conn.row_factory = sqlite3.Row
+
+    # Get filters from query params
+    selected_material = request.args.get('material')
+    selected_type = request.args.get('product_type')
+    sort_order = request.args.get('sort', 'asc')
 
     query = 'SELECT * FROM products WHERE 1=1'
     params = []
 
-    if material:
+    if selected_material:
         query += ' AND material = ?'
-        params.append(material)
-    if product_type:
+        params.append(selected_material)
+    if selected_type:
         query += ' AND product_type = ?'
-        params.append(product_type)
-    if sort == 'asc':
-        query += ' ORDER BY price ASC'
-    elif sort == 'desc':
-        query += ' ORDER BY price DESC'
+        params.append(selected_type)
 
-    conn = sqlite3.connect('products.db')
+    if sort_order == 'desc':
+        query += ' ORDER BY price DESC'
+    else:
+        query += ' ORDER BY price ASC'
+
     products = conn.execute(query, params).fetchall()
+
+    # Fetch distinct materials and types for the filter dropdowns
+    materials = [row[0] for row in conn.execute('SELECT DISTINCT material FROM products WHERE material IS NOT NULL')]
+    product_types = [row[0] for row in conn.execute('SELECT DISTINCT product_type FROM products WHERE product_type IS NOT NULL')]
+
     conn.close()
 
-    return render_template('index.html', products=products, selected_material=material,
-                           selected_type=product_type, selected_sort=sort)
+    return render_template(
+        'index.html',
+        products=products,
+        materials=materials,
+        product_types=product_types
+    )
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
