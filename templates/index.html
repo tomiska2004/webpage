@@ -22,6 +22,12 @@
     .filter-form {
       margin: 20px 0;
     }
+    h1 span { 
+    background-color: #f6ebdb;
+    border-radius: 25px;
+    padding: 8px;
+    
+    }
   </style>
 </head>
 <body class="w3-light-grey w3-content" style="max-width:1600px">
@@ -56,8 +62,11 @@
 <div class="w3-main" style="margin-left:300px">
 
   <header class="w3-container w3-padding-32 w3-center">
-    <h1 class="w3-xxxlarge">Transylvanicum Gem</h1>
-    <img src="{{ url_for('static', filename='images/icon.PNG') }}" alt="Transylvanicum Gem" style="height: 100px;">
+    <div style="background-image: url('{{ url_for('static', filename='images/bg.heic') }}'); background-size: cover; background-repeat: no-repeat; background-position: center; padding: 40px 0;">
+  
+      <h1 class="w3-xxxlarge" style="color:purple;"><span>Transylvanicum Gem</span></h1>
+      <img src="{{ url_for('static', filename='images/icon.PNG') }}" alt="Transylvanicum Gem" style="height: 100px;">
+    </div>
   </header>
 
   <div class="lang-switcher">
@@ -102,27 +111,29 @@
       </div>
     </form>
 
-    <!-- Product Listing -->
-    {% for row in products|batch(3, '') %}
-      <div class="w3-row-padding w3-margin-top">
-        {% for product in row %}
-          {% if product %}
-            <div class="w3-third w3-container w3-margin-bottom">
-              <a href="{{ url_for('product_detail', id=product[0]) }}" class="product-card">
-                <img src="{{ url_for('static', filename='uploads/' ~ product[4]) }}" alt="{{ product[1] }}" class="w3-hover-opacity">
-                <div class="w3-container w3-white">
-                  <p><b>{{ product[1] }}</b></p>
-                  <p>{{ product[2][:80] }}{% if product[2]|length > 80 %}...{% endif %}</p>
-                  <p><strong>{{ product[3] }} RON</strong></p>
-                  <p><i>{{ product[5] }} | {{ product[6] }}</i></p>
-                </div>
-              </a>
-            </div>
-          {% endif %}
-        {% endfor %}
-      </div>
-    {% endfor %}
-  </div>
+    <!-- Product Listing with Background -->
+<div style="background-image: url('{{ url_for('static', filename='images/icon.PNG') }}'); background-size: cover; background-repeat: no-repeat; background-position: center; padding: 40px 0;">
+  {% for row in products|batch(3, '') %}
+    <div class="w3-row-padding w3-margin-top">
+      {% for product in row %}
+        {% if product %}
+          <div class="w3-third w3-container w3-margin-bottom">
+            <a href="{{ url_for('product_detail', id=product[0]) }}" class="product-card">
+              <img src="{{ url_for('static', filename='uploads/' ~ product[4]) }}" alt="{{ product[1] }}" class="w3-hover-opacity">
+              <div class="w3-container w3-white">
+                <p><b>{{ product[1] }}</b></p>
+                <p>{{ product[2][:80] }}{% if product[2]|length > 80 %}...{% endif %}</p>
+                <p><strong>{{ product[3] }} RON</strong></p>
+                <p><i>{{ product[5] }} | {{ product[6] }}</i></p>
+              </div>
+            </a>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>
+
 
   <!-- Contact Section -->
   <div class="w3-container w3-padding-large w3-grey" id="contact">
