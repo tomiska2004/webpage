@@ -50,9 +50,9 @@
   </div>
 
   <div class="w3-bar-block">
-    <a href="/" class="w3-bar-item w3-button" onclick="w3_close()">Home Page</a>
+    <a href="/" class="w3-bar-item w3-button" onclick="w3_close()">{{ _('Home Page') }}</a>
     <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button">
-      <i class="fa fa-envelope w3-margin-right"></i>Contact
+      <i class="fa fa-envelope w3-margin-right"></i>{{ _('Contact') }}
     </a>
   </div>
 
@@ -112,14 +112,14 @@
           <label>{{ _('Sort by price') }}</label>
           <select name="sort" class="w3-select">
             <option value="">None</option>
-            <option value="asc" {% if request.args.get('sort') == 'asc' %}selected{% endif %}>Növekvő</option>
-            <option value="desc" {% if request.args.get('sort') == 'desc' %}selected{% endif %}>Csökkenő</option>
+            <option value="asc" {% if request.args.get('sort') == 'asc' %}selected{% endif %}>{{ _('Ascendent') }}</option>
+            <option value="desc" {% if request.args.get('sort') == 'desc' %}selected{% endif %}>{{ _('Descendent') }}</option>
           </select>
         </div>
       </div>
       <div class="w3-padding">
         <button class="w3-button w3-teal w3-margin-top">Filter</button>
-        <a href="{{ url_for('index') }}" class="w3-button w3-grey w3-margin-top">Delete filters</a>
+        <a href="{{ url_for('index') }}" class="w3-button w3-grey w3-margin-top">{{ _('Delete Filters') }}</a>
       </div>
     </form>
 
