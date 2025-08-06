@@ -6,6 +6,10 @@ from werkzeug.utils import secure_filename
 from flask_babel import Babel, gettext as _
 from flask import request
 
+import csv, zipfile, io
+from flask import send_file
+
+
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
@@ -254,7 +258,53 @@ def product_detail(id):
     conn.close()
     return render_template('product_detail.html', product=product, images=images)
 
+@app.route('/download-products')
+def download_products():
+    if not session.get('admin'):
+        return redirect(url_for('login'))
 
+    conn = get_db_connection()
+    products = conn.execute('SELECT * FROM products').fetchall()
+    conn.close()
+
+    # Create a zip in memory
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, 'w') as zf:
+        # CSV part
+        csv_buffer = io.StringIO()
+        writer = csv.writer(csv_buffer)
+        writer.writerow(['ID', 'Név', 'Leírás', 'Ár', 'Kép', 'Anyag', 'Típus'])  # headers
+        for product in products:
+            writer.writerow(product)
+
+            # Add image to zip
+            image_path = os.path.join(app.static_folder, 'uploads', product['image'])
+            if os.path.exists(image_path):
+                zf.write(image_path, arcname=f'images/{product["image"]}')
+
+        # Add the CSV to zip
+        zf.writestr('products.csv', csv_buffer.getvalue())
+
+    zip_buffer.seek(0)
+    return send_file(
+        zip_buffer,
+        mimetype='application/zip',
+        as_attachment=True,
+        download_name='products_export.zip'
+    )
+    
+@app.route('/download-db')
+def download_db():
+    if not session.get('admin'):
+        return redirect(url_for('login'))
+
+    db_path = os.path.join(os.getcwd(), 'products.db')
+    return send_file(
+        db_path,
+        as_attachment=True,
+        download_name='products.db'
+    )
+    
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5003))
     app.run(host='0.0.0.0', port=port)
