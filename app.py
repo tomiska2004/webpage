@@ -263,34 +263,30 @@ def download_products():
     if not session.get('admin'):
         return redirect(url_for('login'))
 
-    conn = get_db_connection()
-    products = conn.execute('SELECT * FROM products').fetchall()
-    conn.close()
+    # Paths
+    db_path = os.path.join(os.getcwd(), 'products.db')
+    uploads_folder = os.path.join(app.static_folder, 'uploads')
 
-    # Create a zip in memory
+    # Create an in-memory zip file
     zip_buffer = io.BytesIO()
-    with zipfile.ZipFile(zip_buffer, 'w') as zf:
-        # CSV part
-        csv_buffer = io.StringIO()
-        writer = csv.writer(csv_buffer)
-        writer.writerow(['ID', 'Név', 'Leírás', 'Ár', 'Kép', 'Anyag', 'Típus'])  # headers
-        for product in products:
-            writer.writerow(product)
+    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        # Add database
+        zipf.write(db_path, arcname='products.db')
 
-            # Add image to zip
-            image_path = os.path.join(app.static_folder, 'uploads', product['image'])
-            if os.path.exists(image_path):
-                zf.write(image_path, arcname=f'images/{product["image"]}')
-
-        # Add the CSV to zip
-        zf.writestr('products.csv', csv_buffer.getvalue())
+        # Add images (main and extra)
+        for root, _, files in os.walk(uploads_folder):
+            for file in files:
+                file_path = os.path.join(root, file)
+                arcname = os.path.relpath(file_path, app.static_folder)  # relative path inside ZIP
+                zipf.write(file_path, arcname=arcname)
 
     zip_buffer.seek(0)
+
     return send_file(
         zip_buffer,
         mimetype='application/zip',
         as_attachment=True,
-        download_name='products_export.zip'
+        download_name='products_backup.zip'
     )
     
 @app.route('/download-db')
